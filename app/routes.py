@@ -1,5 +1,8 @@
+# app/routes.py
+
 from flask import Blueprint, render_template, request, jsonify
 from googletrans import Translator
+from bs4 import BeautifulSoup
 
 translate_bp = Blueprint('translate', __name__)
 
@@ -15,7 +18,6 @@ def translate_html(html_content, target_language='ar'):
 
 def add_style_to_each_tag(html_content):
     # Function to add style attribute to each tag in the HTML
-    from bs4 import BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
     for tag in soup.find_all():
         if tag.name not in ['html', 'head', 'meta', 'link', 'title', 'style', 'script']:
@@ -24,7 +26,7 @@ def add_style_to_each_tag(html_content):
 
 @translate_bp.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html')  # Make sure this is correct
 
 @translate_bp.route('/translate', methods=['POST'])
 def translate():

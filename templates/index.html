@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to Arabic Translator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>HTML to Arabic Translator</h1>
+    <form id="translate-form">
+        <textarea id="html-content" name="html_content" rows="10" cols="50"></textarea><br>
+        <input type="submit" value="Translate">
+    </form>
+    <div id="translated-content">
+        <h2>Translated HTML Content:</h2>
+        <textarea id="translated-html" rows="10" cols="50" readonly></textarea><br>
+        <button id="copy-button">Copy Translated Content</button>
+        <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading" id="loading" style="display: none;"> <!-- Loading GIF -->
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#translate-form').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                $('#loading').show(); // Show loading sign
+                var formData = $(this).serialize(); // Serialize form data
+                $.post('/translate', formData, function(response) {
+                    $('#translated-html').val(response.translated_html); // Display translated HTML content in textarea
+                }).always(function() {
+                    $('#loading').hide(); // Hide loading sign after translation is complete
+                });
+            });
+
+            // Copy translated content to clipboard
+            $('#copy-button').click(function() {
+                $('#translated-html').select(); // Select the content of the textarea
+                document.execCommand('copy'); // Copy the selected content to clipboard
+                alert('Translated content copied to clipboard!');
+            });
+        });
+    </script>
+</body>
+</html>
